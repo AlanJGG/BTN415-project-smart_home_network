@@ -1,0 +1,34 @@
+*.o
+*.obj
+*.out
+*.exe
+*.app
+*.dll
+*.so
+*.dylib
+
+# Compiled binaries
+*.log
+
+# VS Code
+.vscode/
+
+# CLion / JetBrains
+.idea/
+
+# Xcode
+*.xcworkspace
+*.xcuserdata
+*.xcodeproj
+
+# Windows
+*.pdb
+*.ilk
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+.env
