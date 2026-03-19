@@ -54,7 +54,7 @@ public:
 
     string start() {
         if (!isOn){
-            return "Camera is off.";
+            return "Cannot record because Camera is not turned on. use GET /camera/on to turn on the camera.";
         }
         recording = true;
         return "Recording...";
