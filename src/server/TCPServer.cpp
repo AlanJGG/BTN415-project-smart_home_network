@@ -4,6 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <stdexcept>
+#include "../protocol/ProtocolParser.h"
 
 // Light implementation
 TCPServer::Light::Light() : m_isOn(false)
@@ -100,67 +101,108 @@ TCPServer::~TCPServer()
 }
 
 // Request processing
-std::string TCPServer::processRequest(const std::string &request)
+std::string TCPServer::processRequest(const std::string &rawRequest)
 {
-    std::string responseCode = "200 OK";
-    std::string result;
+    Request req = ProtocolParser::parseRequest(rawRequest);
+    Response res;
 
-    if (request == "GET /light/on")
+    if (!req.valid)
     {
-        result = m_light.on();
+        res.statusCode = "400 Bad Request";
+        res.body = req.errorMessage;
+        return res.toString();
     }
-    else if (request == "GET /light/off")
+
+    if (req.device == "light")
     {
-        result = m_light.off();
-    }
-    else if (request == "GET /light/status")
-    {
-        result = m_light.status();
-    }
-    else if (request.find("GET /thermostat/set/") == 0)
-    {
-        try
+        if (req.action == "on")
         {
-            int value = std::stoi(request.substr(22));
-            result = m_thermostat.setTemp(value);
+            res.statusCode = "200 OK";
+            res.body = m_light.on();
         }
-        catch (...)
+        else if (req.action == "off")
         {
-            responseCode = "400 Bad Request";
-            result = "Invalid temperature value";
+            res.statusCode = "200 OK";
+            res.body = m_light.off();
+        }
+        else if (req.action == "status")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_light.status();
+        }
+        else
+        {
+            res.statusCode = "404 Not Found";
+            res.body = "Invalid light action";
         }
     }
-    else if (request == "GET /thermostat/status")
+    else if (req.device == "thermostat")
     {
-        result = m_thermostat.status();
+        if (req.action == "set")
+        {
+            try
+            {
+                int temperature = stoi(req.value);
+                res.statusCode = "200 OK";
+                res.body = m_thermostat.setTemp(temperature);
+            }
+            catch (...)
+            {
+                res.statusCode = "400 Bad Request";
+                res.body = "Invalid temperature value";
+            }
+        }
+        else if (req.action == "status")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_thermostat.status();
+        }
+        else
+        {
+            res.statusCode = "404 Not Found";
+            res.body = "Invalid thermostat action";
+        }
     }
-    else if (request == "GET /camera/on")
+    else if (req.device == "camera")
     {
-        result = m_camera.on();
-    }
-    else if (request == "GET /camera/off")
-    {
-        result = m_camera.off();
-    }
-    else if (request == "GET /camera/start")
-    {
-        result = m_camera.start();
-    }
-    else if (request == "GET /camera/stop")
-    {
-        result = m_camera.stop();
-    }
-    else if (request == "GET /camera/status")
-    {
-        result = m_camera.status();
+        if (req.action == "on")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_camera.on();
+        }
+        else if (req.action == "off")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_camera.off();
+        }
+        else if (req.action == "start")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_camera.start();
+        }
+        else if (req.action == "stop")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_camera.stop();
+        }
+        else if (req.action == "status")
+        {
+            res.statusCode = "200 OK";
+            res.body = m_camera.status();
+        }
+        else
+        {
+            res.statusCode = "404 Not Found";
+            res.body = "Invalid camera action";
+        }
     }
     else
     {
-        responseCode = "404 Not Found";
-        result = "Invalid request";
+        res.statusCode = "404 Not Found";
+        res.body = "Unknown device";
     }
 
-    return responseCode + " - " + result;
+    return res.toString();
 }
 
 // Client handler
