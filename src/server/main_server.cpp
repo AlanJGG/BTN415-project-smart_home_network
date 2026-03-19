@@ -1,11 +1,13 @@
-/* 
-#include "../utilities/SocketSystem.h"s
+#include <iostream>
+#include "../utilities/SocketSystem.h"
 #include "TCPServer.h"
-#define PORT 5000
+
 int main()
 {
     SocketSystem socketSystem;
-    TCPServer server(PORT);
+
+    TCPServer server(8080);
     server.start();
+
     return 0;
-} */
+}
