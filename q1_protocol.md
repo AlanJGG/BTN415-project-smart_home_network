@@ -1,142 +1,38 @@
-# Inventory Management System Protocol
+# Smart Home Network Automation System
 
-## 1. Overview
+## 1. Network
 
-Communication uses:
-- TCP socket connection using IPv4 (127.0.0.1:65432)
-- JSON formatted messages
-- Request/Response model
+Lighting Subnet:
+- Subnet Address (192.168.1.0/26)
+- Device Type (Lighting systems)
+- Example: Light1 (192.168.1.10)
+- Purpose: Controls lighting operations, like turning lights on/off and checking status.
 
----
+Thermostat Subnet
+- Subnet Address (192.168.1.64/26)
+- Device Type (Temperature control systems)
+- Example: Thermo1 (192.168.1.70)
+- Purpose: Manages temperature settings and monitoring.
 
-## 2. Message Format
-
-All client requests must be valid JSON objects.
-
-### Request Format
-
-{
-    "action": "string",
-    "username": "string",
-    "password": "string (required for login only)",
-    "upc": "string (required for purchase only)",
-    "quantity" integer (required for purchase only)"
-}
-
-The "action" field determines the operation
+Camera Subnet
+- Subnet Address (192.168.1.192/26)
+- Device Type (Security Cameras)
+- Example: Camera1 (192.168.1.200)
+- Purpose: Handles functions such as surveillance, recording, and monitoring.
 
 ---
 
-## 3. Response Format
+## 2. Communications
 
-All server responses follow this structure:
-
-{
-    "status": "ok | error",
-    "message": "string (optional)",
-    "data": object (optional)
-}
+- Client: Sends HTTP-like commands.
+- Server: Processes requests and manages device states.
+- Devices: Act as endpoints simulated through the network.
 
 ---
 
-## 4. Supported Actions
+## 3. Network Interaction 
+- Intra-subnet communication: Devices communicate within the same subnet using ARP.
+- Intra-subnet communication: Packets are routed through a router using static routing.
+- ARP resolution: Used to map IP addresses to MAC addresses before communication.
 
-### 4.1 Login
-
-Request:
-{
-    "action": "login",
-    "username": "user1",
-    "password": "12345"
-}
-
-Response (Success):
-{
-    "status": "ok",
-    "message": "Login Successful"
-}
-
-Reponse (Failure):
-{
-    "status": "error",
-    "message": "Invalid credentials"
-}
-
----
-
-### 4.2 View Inventory
-
-Request:
-{
-    "action": "view_inventory",
-    "username": "user1"
-}
-
-Response:
-{
-    "status": "ok",
-    "data": {
-        "1001": 10,
-        "1002": 5,
-        "1003": 20
-    }
-}
-
-If user is not logged in:
-{
-    "status": "error",
-    "message": "Login required"
-}
-
----
-
-### 4.3 Purchase Item
-
-Request:
-{
-    "action": "purchase",
-    "username": "user1",
-    "upc": "1001",
-    "quantity": 2
-}
-
-Response (Success):
-{
-    "status": "ok",
-    "message": "Purchased 2 of item 1001"
-}
-
-Response (Failure):
-{
-    "status": "error",
-    "message": "Login required | Item not found | Not enough stock"
-}
-
----
-
-### 4.4 Logout
-
-Request:
-{
-    "action": "logout",
-    "username": "user1"
-}
-
-Response:
-{
-    "status": "ok",
-    "message": "Logged out"
-}
-
----
-
-## 5. Persistence
-
-The server persists:
-- Inventory levels (server_inventory.json)
-- Logged-in users (server_logins.json)
-
-Client persists:
-- Local inventory (local_inventory.json)
-
-Data is saved during shutdown, files are read and restored during startup. 
+This typology is for improving scalability and organization by separating the device categories into different subnets, reducing broadcast domains and improving routing efficiency.
