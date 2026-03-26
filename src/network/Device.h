@@ -3,8 +3,9 @@
 
 #include <string>
 
-// Device Class: Represents a smart home device with IP and MAC address
-class Device {
+// Device Class: Represents smart home devices (lighting, thermostat, security, cameras)
+class Device
+{
 private:
     std::string name;
     std::string ip;
@@ -13,7 +14,7 @@ private:
 public:
     Device(std::string n, std::string i, std::string m);
 
-    std::string getIP()  const;
+    std::string getIP() const;
     std::string getMAC() const;
     std::string getName() const;
 };

@@ -6,14 +6,15 @@
 #include <iostream>
 
 // Router: Simulates static routing between subnets (/26 blocks)
-class Router {
+class Router
+{
 public:
-    std::map<std::string, std::string> routingTable; // subnet base -> gateway label
+    std::map<std::string, std::string> routingTable;
 
-    void addRoute(const std::string& destination, const std::string& nextHop);
+    void addRoute(const std::string &destination, const std::string &nextHop);
 
-    // Returns the gateway name for destIP, or "NO_ROUTE"
-    std::string routePacket(const std::string& destIP) const;
+    // Returns the gateway name for destIP
+    std::string routePacket(const std::string &destIP) const;
 };
 
 #endif
