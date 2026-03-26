@@ -4,19 +4,19 @@
 
 Lighting Subnet:
 - Subnet Address (192.168.1.0/26)
-- Device Type (Lighting systems)
+- Device Type: Lightbulbs device
 - Example: Light1 (192.168.1.10)
 - Purpose: Controls lighting operations, like turning lights on/off and checking status.
 
 Thermostat Subnet
 - Subnet Address (192.168.1.64/26)
-- Device Type (Temperature control systems)
+- Device Type: Temperature device
 - Example: Thermo1 (192.168.1.70)
 - Purpose: Manages temperature settings and monitoring.
 
 Camera Subnet
 - Subnet Address (192.168.1.192/26)
-- Device Type (Security Cameras)
+- Device Type: Security Cameras
 - Example: Camera1 (192.168.1.200)
 - Purpose: Handles functions such as surveillance, recording, and monitoring.
 
