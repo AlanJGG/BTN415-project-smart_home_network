@@ -66,23 +66,22 @@ bool TCPClient::connectToServer()
         return false;
     }
 
-    std::cout << "Connected to server" << std::endl;
+    std::cout << "[CLIENT] Connected to " << m_serverIp << ":" << m_port << std::endl;
     return true;
 }
 
 void TCPClient::run()
 {
     if (!connectToServer())
-    {
         return;
-    }
 
     displayMenu();
 
     while (true)
     {
+        std::cout << "> ";
         std::string command;
-        getline(std::cin, command);
+        std::getline(std::cin, command);
 
         if (command.empty())
         {
@@ -92,7 +91,7 @@ void TCPClient::run()
 
         if (command == "q" || command == "Q")
         {
-            std::cout << "Disconnecting..." << std::endl;
+            std::cout << "[CLIENT] Disconnecting..." << std::endl;
             break;
         }
 

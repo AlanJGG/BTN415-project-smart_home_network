@@ -11,13 +11,13 @@ private:
     int m_port;
     socket_t m_clientSocket;
 
+    bool connectToServer();
     void displayMenu() const;
 
 public:
     TCPClient(const std::string &serverIp = "127.0.0.1", int port = 8080);
     ~TCPClient();
 
-    bool connectToServer();
     void run();
 };
 
