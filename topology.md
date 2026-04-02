@@ -33,8 +33,24 @@ Routing Behavior:
 -Different subnet (inter-subnet) -> Packet sent to router, router forwards based on routing table
 
 ---
+### 3. API Design (HTTP-like Protocol)
+The system implements a lightweight HTTP-like API over TCP sockets for allopwing clients to interact with devices.
 
-## 3. ARP Integration
+Supported Endpoints
+GET /light/on - Turn light ON
+GET /light/off - Turn light OFF
+GET /light/status - Get light status
+GET /thermostat/set/{value) - Set temperature
+GET /thermostat/status - Get temperature
+GET /camera/on - Turn camera ON
+GET /camera/off - Turn camera OFF
+GET /camera/start - Start recording
+GET /camera/stop - Stop recording
+GET /camera/status - Get camera status
+
+---
+
+## 4. ARP Integration
 Addressed Resolution Protocol (ARP) is used for map IP addressed to MAC addressed before packet tranmission.
 
 -Process:
@@ -47,7 +63,7 @@ This ensures realistic LAN communication, required before any packet delivery.
 
 ---
 
-## 4. Communication Architecture
+## 5. Communication Architecture
 
 - Client: Sends HTTP-like commands (e.g. GET /light/on).
 - Server: Handles requests using TCP sockets, used multithreading for concurrency, dispatches commands to devices, dispatches commands to devices.
@@ -55,14 +71,14 @@ This ensures realistic LAN communication, required before any packet delivery.
 
 ---
 
-## 5. Network Interaction 
+## 6. Network Interaction 
 - Intra-subnet communication: Devices communicate within the same subnet using ARP.
 - Intra-subnet communication: Packets are routed through a router using static routing.
 - ARP resolution: Used to map IP addresses to MAC addresses before communication.
 
 ---
 
-## 6. Network Interaction Flow Example
+## 7. Network Interaction Flow Example
 
 1. Client sends: GET /camera/on
 2. Server:
