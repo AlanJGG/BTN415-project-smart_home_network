@@ -32,6 +32,8 @@ Routing Behavior:
 -Same subnet (intra-subnet) -> Direct communication using ARP
 -Different subnet (inter-subnet) -> Packet sent to router, router forwards based on routing table
 
+---
+
 ## 3. ARP Integration
 Addressed Resolution Protocol (ARP) is used for map IP addressed to MAC addressed before packet tranmission.
 
@@ -42,6 +44,8 @@ Addressed Resolution Protocol (ARP) is used for map IP addressed to MAC addresse
 4. Packet is sent
 
 This ensures realistic LAN communication, required before any packet delivery.
+
+---
 
 ## 4. Communication Architecture
 
@@ -55,5 +59,21 @@ This ensures realistic LAN communication, required before any packet delivery.
 - Intra-subnet communication: Devices communicate within the same subnet using ARP.
 - Intra-subnet communication: Packets are routed through a router using static routing.
 - ARP resolution: Used to map IP addresses to MAC addresses before communication.
+
+---
+
+## 6. Network Interaction Flow Example
+
+1. Client sends: GET /camera/on
+2. Server:
+   - Parses requests
+   - Calls sendPacket()
+3. Network Simulation
+   - ARP resolves MAC address
+   - Router determines correct subnet
+4. Packet delivere to device
+5. Device executes:
+   - Camera turns ON
+6. Response sent back to client
 
 This typology is for improving scalability and organization by separating the device categories into different subnets, reducing broadcast domains and improving routing efficiency.
