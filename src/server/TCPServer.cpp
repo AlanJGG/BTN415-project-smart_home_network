@@ -101,9 +101,9 @@ TCPServer::TCPServer(int port)
     m_arp.addEntry("192.168.1.200", "AA:BB:CC:DD:04");
 
     // Build static routing table  (subnet base -> gateway label)
-    m_router.addRoute("192.168.1.0", "Lighting Gateway");
-    m_router.addRoute("192.168.1.64", "Thermostat Gateway");
-    m_router.addRoute("192.168.1.192", "Camera Gateway");
+    m_router.addRoute("192.168.1.0", "192.168.1.1");
+    m_router.addRoute("192.168.1.64", "192.168.1.65");
+    m_router.addRoute("192.168.1.192", "192.168.1.193");
 
     // Start one thread per device
     m_lightThread = std::thread(&TCPServer::lightWorker, this);
