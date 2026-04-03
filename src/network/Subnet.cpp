@@ -1,9 +1,16 @@
+//
+//  Subnet.cpp
+//  NetworkSimulator
+//
+// 
+//
+
 #include "Subnet.h"
 
-Subnet::Subnet(const std::string &net, const std::string &mask)
-    : networkAddress(net), subnetMask(mask) {}
+ Subnet::Subnet(std::string net, std::string mask, std::string gw)
+    : networkAddress(net), subnetMask(mask), gateway(gw){}
 
-void Subnet::addDevice(const Device &d)
-{
+void Subnet::addDevice(Device d) {
     devices.push_back(d);
 }
+
