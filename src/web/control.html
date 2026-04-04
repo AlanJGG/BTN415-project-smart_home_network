@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" data-theme="pastel">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Smart Home Control Panel</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"/>
+  <style>
+    body{
+        font-family: 'Rubik', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+    .device{
+        background: rgba(237, 16, 134, 0.879);
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .flex-buttons{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: black
+    }
+    .response{
+        background: #f0f9ff;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-top: 1rem;
+        font-family: monospace;
+        color: black;
+    }
+  </style>
+</head>
+<body>
+    <h1 class="text-2xl font-bold mb-6">Smart Home Control Panel </h1>
+
+    <div class="device">
+        <h2> Lights</h2>
+        <div class="flex-buttons">
+        <button class="btn btn-primary btn-sm" onClick="sendCommand('GET /light/on')">Light ON</button>
+        <button class="btn btn-secondary btn-sm" onClick="sendCommand('GET /light/off')">Light OFF</button>
+        <button class="btn btn-accent btn-sm"onClick="sendCommand('GET /light/status')">Light Status</button>
+      </div>
+    </div>
+
+    <div class="device">
+        <h2> Thermostat</h2>
+        <div class="flex-buttons">
+        <button class="btn btn-primary btn-sm" onClick="sendCommand('GET /thermostat/set/18')">Set 18°C</button>
+        <button class="btn btn-warning btn-sm" onClick="sendCommand('GET /thermostat/set/22')">Set 22°C</button>
+        <button class="btn btn-info btn-sm" onClick="sendCommand('GET /thermostat/set/26')">Set 26°C</button>
+        <button class="btn btn-accent btn-sm" onClick="sendCommand('GET /thermostat/set/status')">Thermostat Status</button>
+        </div>
+    </div>
+     
+    <div class="device">
+     <h2>Camera</h2>
+     <div class="flex-buttons">
+     <button class="btn btn-primary btn-sm" onClick="sendCommand('GET /camera/on')">Camera ON</button>
+     <button class="btn btn-secondary btn-sm" onClick="sendCommand('GET /camera/off')">Camera OFF</button>
+     <button class="btn btn-warning btn-sm" onClick="sendCommand('GET /camera/start')">Start Recording</button>
+     <button class="btn btn-error btn-sm" onClick="sendCommand('GET /camera/stop')">Stop Recording</button>
+     <button class="btn btn-accent btn-sm" onClick="sendCommand('GET /camera/status')">Camera Status</button>
+    </div>
+
+    </div>
+
+    <div class="response" id="response">
+        Click a button to control devices
+    </div>
+
+    <script>
+        async function sendCommand(cmd){
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = " Sending: " + cmd + "...";
+
+            try{
+                const res = await fetch('/cmd/' + encodeURIComponent(cmd));
+                const text = await res.text();
+                responseDiv.innerHTML = "✅ " + text;
+            } catch (error){
+                responseDiv.innerHTML = "❌ Error:" + error.message;
+            }
+
+        }
+    </script>
+</body>
+</html>
