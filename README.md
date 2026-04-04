@@ -76,6 +76,9 @@ The network uses **VLSM /26 subnetting** of the 192.168.1.0/24 address space. Ea
 | Cameras         | 192.168.1.192    | 255.255.255.192 /26| 192.168.1.193 – 192.168.1.254    | Camera1   | 192.168.1.200  | AA:BB:CC:DD:04  |
 
 > A /26 subnet gives 64 addresses (62 usable hosts) per segment.
+> This simplifies the routing because the router can now determine the destination subnet by checking which 64-address block contains the target IP.
+> The /26 mask was chosen over other options because it provides adequate address space for each device category while maintaining simple, predictable boundaries.
+
 
 ### Static Routing Table
 
@@ -93,9 +96,33 @@ The network uses **VLSM /26 subnetting** of the 192.168.1.0/24 address space. Ea
 | 192.168.1.70   | AA:BB:CC:DD:02 |
 | 192.168.1.200  | AA:BB:CC:DD:04 |
 
+Routing Behavior: 
+Same subnet (intra-subnet) -> Direct communication using ARP
+Different subnet (inter-subnet) -> Packet sent to router, router forwards based on routing table
+
 ---
 
-## 5. How to Build
+## 5. ARP Integration
+Addressed Resolution Protocol (ARP) is used for map IP addressed to MAC addressed before packet tranmission.
+
+Process:
+1. Device checks ARP table
+2. If MAC not found -> ARP request
+3. MAC address resolved
+4. Packet is sent
+
+This ensures realistic LAN communication, required before any packet delivery.
+
+---
+
+## 6. Network Interaction 
+- Intra-subnet communication: Devices communicate within the same subnet using ARP.
+- Intra-subnet communication: Packets are routed through a router using static routing.
+- ARP resolution: Used to map IP addresses to MAC addresses before communication.
+
+---
+
+## 7. How to Build
 
 ### Requirements
 
@@ -111,8 +138,8 @@ make
 ```
 
 This produces two executables in the project root:
-- `server` — the TCP server
-- `client` — the interactive client
+- `server` — the TCP server, handles requests using TCP sockets, used multithreading for concurrency, dispatches commands to devices, dispatches commands to devices.
+- `client` — the interactive client, sends HTTP-like commands (e.g. GET /light/on).
 
 ### Build individually
 
@@ -124,7 +151,7 @@ make clean    # remove compiled binaries
 
 ---
 
-## 6. How to Run
+## 8. How to Run
 
 ### Step 1 — Start the server
 
@@ -168,7 +195,7 @@ Open two or three terminals and run `./client` in each. The server handles all o
 
 ---
 
-## 7. Command Reference
+## 9. Command Reference
 
 All commands follow the format:
 
@@ -209,7 +236,7 @@ GET /<device>/<action>[/<value>]
 
 ---
 
-## 8. Sample Session
+## 10. Sample Session
 
 ```
 > GET /light/on
@@ -260,7 +287,7 @@ GET /<device>/<action>[/<value>]
 
 ---
 
-## 9. Module Descriptions
+## 11. Module Descriptions
 
 ### `src/network/Device`
 Represents a smart home endpoint. Stores name, IP address, and MAC address. Used by ARPTable and sendPacket() to identify endpoints on the simulated network.
@@ -299,7 +326,7 @@ Connects to the server, displays the command menu, and runs a read/send/receive 
 
 ---
 
-## 10. Threading Model
+## 12. Threading Model
 
 ```
 - main()
@@ -331,7 +358,7 @@ Connects to the server, displays the command menu, and runs a read/send/receive 
 
 ---
 
-## 11. Protocol Specification
+## 13. Protocol Specification
 
 ### Request
 
@@ -360,3 +387,5 @@ GET /<device>/<action>[/<value>] \n
 | `200 OK`        | Command executed successfully                |
 | `400 Bad Request` | Malformed request, unknown method          |
 | `404 Not Found` | Unknown device or unsupported action         |
+
+This typology is for improving scalability and organization by separating the device categories into different subnets, reducing broadcast domains and improving routing efficiency.
