@@ -86,9 +86,9 @@ TCPServer::TCPServer(int port)
       m_thermoDevice("Thermo1", "192.168.1.70", "AA:BB:CC:DD:02"),
       m_cameraDevice("Camera1", "192.168.1.200", "AA:BB:CC:DD:04"),
       // VLSM /26 subnets  (64 addresses each)
-      m_lightingSubnet("192.168.1.0", "255.255.255.192"),
-      m_thermostatSubnet("192.168.1.64", "255.255.255.192"),
-      m_cameraSubnet("192.168.1.192", "255.255.255.192")
+      m_lightingSubnet("192.168.1.0", "255.255.255.192", "192.168.1.1"),
+      m_thermostatSubnet("192.168.1.64", "255.255.255.192", "192.168.1.65"),
+      m_cameraSubnet("192.168.1.192", "255.255.255.192", "192.168.1.193")
 {
     // Assign devices to subnets
     m_lightingSubnet.addDevice(m_lightDevice);
