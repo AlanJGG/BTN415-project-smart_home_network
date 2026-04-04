@@ -1,3 +1,10 @@
+//
+//  Router.h
+//  NetworkSimulator
+//
+//
+//
+
 #ifndef ROUTER_H
 #define ROUTER_H
 
@@ -5,16 +12,16 @@
 #include <map>
 #include <iostream>
 
-// Router: Simulates static routing between subnets (/26 blocks)
-class Router
-{
+//Router class: Router + Static Routing
+
+class Router {
 public:
     std::map<std::string, std::string> routingTable;
+    
+    void addRoute(std::string destination, std::string nextHop);
+    
+    void routePacket(std::string destIP);
 
-    void addRoute(const std::string &destination, const std::string &nextHop);
-
-    // Returns the gateway name for destIP
-    std::string routePacket(const std::string &destIP) const;
+    std::string getGateway(std::string destIP);
 };
-
 #endif
