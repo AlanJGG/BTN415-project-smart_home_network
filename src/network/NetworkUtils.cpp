@@ -1,40 +1,23 @@
+//
+//  NetworkUtils.cpp
+//  NetworkSimulator
+//
+// 
+//
+
 #include "NetworkUtils.h"
-#include <sstream>
-#include <iostream>
 
-std::string sendPacket(const Device &sender,
-                       const std::string &targetIP,
-                       ARPTable &arp,
-                       const Router &router)
-{
-    std::ostringstream trace;
-    trace << "[NET] " << sender.getName()
-          << " (" << sender.getIP() << ") -> " << targetIP << "\n";
-
-    // ARP resolution
+std::string sendPacket(Device& sender, std::string targetIP, ARPTable& arp, Router& router) {
+    std::string result = sender.getName() + " sending packet to " + targetIP + "\n";
+    
     std::string mac = arp.resolve(targetIP);
-    if (mac == "ARP_MISS")
-    {
-        trace << "[ARP] Broadcast request for " << targetIP
-              << " ... no reply (device unknown)\n";
+    
+    if (mac == "Not found") {
+        result += "ARP Request broadcast...\n";
+    } else {
+       result += "MAC Found: " + mac + "\n";
     }
-    else
-    {
-        trace << "[ARP] Resolved " << targetIP << " -> " << mac << "\n";
-    }
-
-    // Routing
     std::string gateway = router.routePacket(targetIP);
-    if (gateway == "NO_ROUTE")
-    {
-        trace << "[ROUTE] No route found for " << targetIP << "\n";
-    }
-    else
-    {
-        trace << "[ROUTE] Forwarding via " << gateway << "\n";
-    }
-
-    // print to server console for demonstration
-    std::cout << trace.str();
-    return trace.str();
+    result += "Routing to " + gateway + "\n";
+    return result;
 }
