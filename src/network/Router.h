@@ -20,7 +20,7 @@ public:
     
     void addRoute(std::string destination, std::string nextHop);
     
-    void routePacket(std::string destIP);
+    std::string routePacket(std::string destIP);
 
     std::string getGateway(std::string destIP);
 };
