@@ -24,7 +24,7 @@ void Router::addRoute(std::string destination, std::string nextHop) {
     }
 
 
-void Router::routePacket(std::string destIP) {
+std::string Router::routePacket(std::string destIP) {
     
     int ipLast = std::stoi(destIP.substr(destIP.find_last_of('.') + 1));
     //Example: destIP = 192.168.1.70 -> lastOctet = 70
@@ -45,8 +45,9 @@ void Router::routePacket(std::string destIP) {
              usable hosts per subnet.
              */
             std::cout << "Routing to " << route.second << std::endl;
-            return;
+            return route.second;
         }
     }
     std::cout << "No route found\n";
+    return "NO_ROUTE";
 }
