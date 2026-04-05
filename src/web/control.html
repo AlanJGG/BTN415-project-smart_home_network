@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Smart Home Control Panel</title>
-
+  <!-- DaisyUI and Tailwind CSS for styling -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.css" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Custom fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"/>
   <style>
     body{
@@ -47,7 +47,7 @@
 </head>
 <body>
     <h1 class="text-2xl font-bold mb-6">Smart Home Control Panel </h1>
-
+    <!-- Lights Section-->
     <div class="device">
         <h2> Lights</h2>
         <div class="flex-buttons">
@@ -56,7 +56,7 @@
         <button class="btn btn-accent btn-sm"onClick="sendCommand('GET /light/status')">Light Status</button>
       </div>
     </div>
-
+    <!-- Thermostat Section-->
     <div class="device">
         <h2> Thermostat</h2>
         <div class="flex-buttons">
@@ -66,7 +66,7 @@
         <button class="btn btn-accent btn-sm" onClick="sendCommand('GET /thermostat/status')">Thermostat Status</button>
         </div>
     </div>
-     
+    <!-- Camera Section-->
     <div class="device">
      <h2>Camera</h2>
      <div class="flex-buttons">
@@ -78,12 +78,13 @@
     </div>
 
     </div>
-
+    <!-- Response Display Area-->
     <div class="response" id="response">
         Click a button to control devices
     </div>
 
     <script>
+        // sends command to Flask server, which forwards to C++ server
         async function sendCommand(cmd){
             const responseDiv = document.getElementById('response');
             responseDiv.innerHTML = " Sending: " + cmd + "...";
@@ -91,7 +92,13 @@
             try{
                 const res = await fetch('/cmd/' + encodeURIComponent(cmd));
                 const text = await res.text();
-                responseDiv.innerHTML = "✅ " + text;
+
+              // Check if response contains an error message
+              if (text.startsWith("Error:")){
+                  responseDiv.innerHTML = "❌ " + text;  //error
+              } else{  
+                responseDiv.innerHTML = "✅ " + text; // success
+              }
             } catch (error){
                 responseDiv.innerHTML = "❌ Error:" + error.message;
             }
