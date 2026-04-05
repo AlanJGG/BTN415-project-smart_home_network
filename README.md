@@ -64,7 +64,7 @@ TCP socket.
 
 ## 4. Network Design
 
-The network uses **VLSM /26 subnetting** of the 192.168.1.0/24 address space. Each device type lives in its own subnet.
+The network uses **equal-size /26 subnetting** of the 192.168.1.0/24 address space. Each device type lives in its own subnet.
 
 ### Subnet Table
 
